@@ -5,10 +5,10 @@
 #include "delay.h"
 
 
-const uint8_t key_map[] = {	'0','1','2','3',
-							'4','5','6','7',
-							'8','9','*','#',
-							'A','B','C','D'
+const uint8_t key_map[] = {	'D','#','0','*',
+							'C','9','8','7',
+							'B','6','5','4',
+							'A','3','2','1'
 						  };
 
 uint8_t read_keypad(void)
@@ -18,6 +18,7 @@ uint8_t read_keypad(void)
 	LPC_GPIO1->FIODIR &= ~(1 << KEY_C1);
 	LPC_GPIO1->FIODIR &= ~(1 << KEY_C2);
 	LPC_GPIO1->FIODIR &= ~(1 << KEY_C3);
+
 	LPC_GPIO1->FIOSET |= (1 << KEY_C0);
 	LPC_GPIO1->FIOSET |= (1 << KEY_C1);
 	LPC_GPIO1->FIOSET |= (1 << KEY_C2);
@@ -34,6 +35,13 @@ uint8_t read_keypad(void)
 	LPC_GPIO1->FIOSET |= (1 << KEY_R1);
 	LPC_GPIO1->FIOSET |= (1 << KEY_R2);
 	LPC_GPIO1->FIOSET |= (1 << KEY_R3);
+
+	LPC_GPIO1->FIOSET |= (1 << KEY_C0);
+	LPC_GPIO1->FIOSET |= (1 << KEY_C1);
+	LPC_GPIO1->FIOSET |= (1 << KEY_C2);
+	LPC_GPIO1->FIOSET |= (1 << KEY_C3);
+
+	_delay_us(10);
 
 	if( ((LPC_GPIO1->FIOPIN) & (1 << KEY_C0)) == 0 )
 	{

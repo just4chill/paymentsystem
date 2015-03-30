@@ -2,7 +2,7 @@
 #ifndef __keypad_h__
 #define __keypad_h__
 
-#define _SWITCH_DEB_DELAY 100
+#define _SWITCH_DEB_DELAY 10
 
 // Port (P1)
 #define KEY_C0 19
