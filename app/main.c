@@ -10,23 +10,17 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-
+#include "keypad.h"
 
 void prvSetupHardware( void );
 
 
-static void lcdTask(void * pvParameters)
+static void scanCard(void * pvParameters)
 {
 	uint32_t count = 0;
 	uint8_t tag_no[20];
-	uint8_t buff[20];
 	for(;;)
 	{
-		// count++;
-		// sprintf(buff, "%d",uart3_rx_head);
-		// lcd_write_instruction_4d(0xC0);
-		// lcd_print(buff);
-		// vTaskDelay(1000);
 		if(uart3_rx_head == 12)
 		{
 			memcpy(tag_no, uart3_rx_fifo, 12);
@@ -43,19 +37,41 @@ static void lcdTask(void * pvParameters)
 	}
 }
 
+static void scanKey(void * pvParameters)
+{
+	uint8_t key_val = 0;
+	uint8_t key_buff[20];
+	uint8_t key_count = 0;
+	for(;;)
+	{
+		key_val = read_keypad();
+		if(key_val != 0)
+		{
+			lcd_write_instruction_4d(0x80);
+			lcd_write_character_4d(key_val);
+		}
+	}
+}
+
 int main(void)
 {
 	/* Setup the Hardware */
 	prvSetupHardware();
 
 	/* Create the Tasks */
-	xTaskCreate(lcdTask,
-			(signed portCHAR *)"lcdTask",
+	xTaskCreate(scanCard,
+			(signed portCHAR *)"scanCard",
 			128,
 			NULL,
 			3,
 			NULL);
 
+	xTaskCreate(scanKey,
+			(signed portCHAR *)"scanKey",
+			128,
+			NULL,
+			4,
+			NULL);
 
 	/* Start the scheduler */
 	vTaskStartScheduler();

@@ -34,7 +34,8 @@ OBJS = 	list.o \
 		uart.o \
 		lcd.o \
 		syscalls.o \
-		delay.o 
+		delay.o \
+		keypad.o
 
 all: $(OBJS)
 	$(CC)gcc $(LFLAGS) $(OBJS) -o $(OUTPUT)
@@ -83,4 +84,7 @@ delay.o: delay.c
 	$(CC)gcc $(CFLAGS) $^ -o $@
 
 lcd.o: lcd.c
+	$(CC)gcc $(CFLAGS) $^ -o $@
+
+keypad.o: keypad.c
 	$(CC)gcc $(CFLAGS) $^ -o $@
